@@ -1,0 +1,237 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/park": {
+            "get": {
+                "description": "Get parking spots",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "parking"
+                ],
+                "summary": "Get parking spots",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create parking spot",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "parking"
+                ],
+                "summary": "Create parking spot",
+                "parameters": [
+                    {
+                        "description": "Create parking spot request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/services.CreateParkingSpotRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.ParkingSpot"
+                        }
+                    }
+                }
+            }
+        },
+        "/park/{name}": {
+            "get": {
+                "description": "Get parking spot",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "parking"
+                ],
+                "summary": "Get parking spot",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Parking spot name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.ParkingSpot"
+                        }
+                    }
+                }
+            }
+        },
+        "/payments": {
+            "get": {
+                "description": "Get all payments",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payments"
+                ],
+                "summary": "Get all payments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/payments.GetAllPaymentsResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/payments/{id}": {
+            "put": {
+                "description": "Update a payment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "payments"
+                ],
+                "summary": "Update a payment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Payment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Payment",
+                        "name": "payment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payments.UpdatePaymentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "payments.GetAllPaymentsResponse": {
+            "type": "object",
+            "properties": {
+                "payments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/payments.GetPaymentResponse"
+                    }
+                }
+            }
+        },
+        "payments.GetPaymentResponse": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "payments.UpdatePaymentRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.CreateParkingSpotRequest": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.ParkingSpot": {
+            "type": "object",
+            "properties": {
+                "car": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "occupied": {
+                    "type": "boolean"
+                },
+                "occupiedAt": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
