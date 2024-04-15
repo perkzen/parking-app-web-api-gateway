@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  artemis:
+    image: quay.io/artemiscloud/activemq-artemis-broker:1.0.25
+    container_name: artemis
+    restart: unless-stopped
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "5672:5672"
+    environment:
+      - AMQ_USER=quarkus
+      - AMQ_PASSWORD=quarkus
+    networks:
+      - parking_network
+
+  mongo:
+    image: mongo:4.0.4
+    container_name: mongo
+    restart: on-failure
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - ./data:/data/db
+    networks:
+        - parking_network
+
+
+  parking-service:
+    image: perkzen/parking-app-parking-service
+    ports:
+      - "8080:8080"
+    environment:
+      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://root:root@mongo:27017
+      - QUARKUS_MONGODB_DATABASE=parking
+      - QUARKUS_ARTEMIS_URL=tcp://artemis:61616
+      - QUARKUS_ARTEMIS_USERNAME=quarkus
+      - QUARKUS_ARTEMIS_PASSWORD=quarkus
+    depends_on:
+      - artemis
+      - mongo
+    networks:
+        - parking_network
+
+
+  web-api-gateway:
+    image: perkzen/parking-app-web-api-gateway
+    ports:
+      - "3000:8080"
+    environment:
+      - PARKING_SERVICE_URL=http://parking-service:8080
+    depends_on:
+      - parking-service
+    networks:
+        - parking_network
+
+networks:
+  parking_network:
+    driver: bridge

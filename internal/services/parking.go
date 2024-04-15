@@ -32,7 +32,7 @@ type CreateParkingSpotRequest struct {
 	Location string `json:"location"`
 }
 
-func (p *ParkingService) GetParkingSpots() ([]string, error) {
+func (p *ParkingService) GetParkingSpots() ([]ParkingSpot, error) {
 
 	req, err := http.NewRequest("GET", p.URL+"/park", nil)
 	if err != nil {
@@ -48,7 +48,7 @@ func (p *ParkingService) GetParkingSpots() ([]string, error) {
 
 	defer resp.Body.Close()
 
-	var parkingSpots []string
+	var parkingSpots []ParkingSpot
 
 	err = json.NewDecoder(resp.Body).Decode(&parkingSpots)
 	if err != nil {
