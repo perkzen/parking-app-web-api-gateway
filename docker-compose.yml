@@ -15,9 +15,9 @@ services:
     networks:
       - parking_network
 
-  mongo:
+  parking-mongo:
     image: mongo:4.0.4
-    container_name: mongo
+    container_name: parking-mongo
     restart: on-failure
     ports:
       - "27017:27017"
@@ -25,27 +25,51 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
-      - ./data:/data/db
+      - ./data/parking:/data/db
     networks:
-        - parking_network
+      - parking_network
 
+  payments-mongo:
+    image: mongo:4.0.4
+    container_name: payments-mongo
+    restart: on-failure
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - ./data/payments:/data/db
+    networks:
+      - parking_network
 
   parking-service:
     image: perkzen/parking-app-parking-service
     ports:
       - "8080:8080"
     environment:
-      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://root:root@mongo:27017
+      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://root:root@parking-mongo:27017
       - QUARKUS_MONGODB_DATABASE=parking
       - QUARKUS_ARTEMIS_URL=tcp://artemis:61616
       - QUARKUS_ARTEMIS_USERNAME=quarkus
       - QUARKUS_ARTEMIS_PASSWORD=quarkus
     depends_on:
       - artemis
-      - mongo
+      - parking-mongo
     networks:
-        - parking_network
+      - parking_network
 
+  payments-service:
+    image: perkzen/parking-app-payments-service
+    ports:
+      - "8081:8080"
+      - "9000:9000"
+    environment:
+      - QUARKUS_MONGODB_CONNECTION_STRING=mongodb://root:root@payments-mongo:27017
+    depends_on:
+      - payments-mongo
+    networks:
+      - parking_network
 
   web-api-gateway:
     image: perkzen/parking-app-web-api-gateway
@@ -53,10 +77,12 @@ services:
       - "3000:8080"
     environment:
       - PARKING_SERVICE_URL=http://parking-service:8080
+      - PAYMENT_SERVICE_GRPC_URL=payments-service:9000
+      - PAYMENT_SERVICE_URL=http://payments-service:8081
     depends_on:
       - parking-service
     networks:
-        - parking_network
+      - parking_network
 
 networks:
   parking_network:
