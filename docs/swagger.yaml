@@ -63,7 +63,7 @@ paths:
           description: OK
           schema:
             items:
-              type: string
+              $ref: '#/definitions/services.ParkingSpot'
             type: array
       summary: Get parking spots
       tags:

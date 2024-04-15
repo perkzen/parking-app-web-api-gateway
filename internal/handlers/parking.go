@@ -20,7 +20,7 @@ func NewParkingHandler() *ParkingHandler {
 // @Summary Get parking spots
 // @Description Get parking spots
 // @Produce json
-// @Success 200 {array} string
+// @Success 200 {array} services.ParkingSpot
 // @Router /park [get]
 func (p *ParkingHandler) GetParkingSpots(c *gin.Context) {
 	parkingSpots, err := p.ParkingService.GetParkingSpots()
