@@ -22,6 +22,7 @@ func NewPaymentHandler() *PaymentHandler {
 // @Description Update a payment
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id path string true "Payment ID"
 // @Param payment body payments.UpdatePaymentRequest true "Payment"
 // @Success 200 {string} string
@@ -53,6 +54,7 @@ func (p *PaymentHandler) UpdatePayment(c *gin.Context) {
 // @Summary Get all payments
 // @Description Get all payments
 // @Produce json
+// @Security ApiKeyAuth
 // @Success 200 {array} payments.GetAllPaymentsResponse
 // @Router /payments [get]
 func (p *PaymentHandler) GetPayments(c *gin.Context) {

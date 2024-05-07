@@ -28,6 +28,7 @@ func InitRouter(app *gin.Engine) {
 		})
 	})
 
+	setupAuthRoutes(app)
 	setupParkingRoutes(app)
 	setupPaymentRoutes(app)
 }

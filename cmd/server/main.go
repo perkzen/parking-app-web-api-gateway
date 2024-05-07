@@ -8,6 +8,9 @@ import (
 	"parking-app-web-api-gateway/internal/utils"
 )
 
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 
 	_ = godotenv.Load(".env")

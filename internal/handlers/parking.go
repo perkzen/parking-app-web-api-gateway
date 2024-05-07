@@ -19,6 +19,7 @@ func NewParkingHandler() *ParkingHandler {
 // @Tags parking
 // @Summary Get parking spots
 // @Description Get parking spots
+// @Security ApiKeyAuth
 // @Produce json
 // @Success 200 {array} services.ParkingSpot
 // @Router /park [get]
@@ -39,6 +40,7 @@ func (p *ParkingHandler) GetParkingSpots(c *gin.Context) {
 // @Summary Get parking spot
 // @Description Get parking spot
 // @Produce json
+// @Security ApiKeyAuth
 // @Param name path string true "Parking spot name"
 // @Success 200 {object} services.ParkingSpot
 // @Router /park/{name} [get]
@@ -62,6 +64,7 @@ func (p *ParkingHandler) GetParkingSpot(c *gin.Context) {
 // @Description Create parking spot
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param request body services.CreateParkingSpotRequest true "Create parking spot request"
 // @Success 200 {object} services.ParkingSpot
 // @Router /park [post]
